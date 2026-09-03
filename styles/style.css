@@ -294,10 +294,6 @@ article {
 }
 
 @media(min-width: 64rem) {
-    div.bottom {
-        display: block;
-    }
-
     article {
         flex-direction: row;
     }
