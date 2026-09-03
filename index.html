@@ -13,29 +13,99 @@
   <script defer src="./scripts/script.js"></script>
 </head>
 <body>
+  <main>
+    <header>
+      <img src="./images/logo.svg" alt="SPLITTER">
+    </header>
+    <article>
+      <form class="input-form">
+        <label for="bill" class="label">
+          Bill
+          <span class="error">Error Text</span>
+        </label>
+        <div class="field">
+          <img src="./images/icon-dollar.svg" alt="" class="field-img">
+          <input
+            type="number"
+            id="bill"
+            name="bill" class="field-input"
+            placeholder="0" />
+        </div>
 
-  Bill
+        <label for="tip" class="label">
+          Select Tip %
+          <span class="error">Error Text</span>
+        </label>
+        <div id="tip" class="grid">
+          <div class="field radio">
+            <input type="radio" name="tip" id="tip-5" value="5" class="field-input radio">
+            <label for="tip-5" class="label radio">5%</label>
+          </div>
+          <div class="field radio">
+            <input type="radio" name="tip" id="tip-10" value="10" class="field-input radio">
+            <label for="tip-10" class="label radio">10%</label>
+          </div>
+          <div  class="field radio">
+            <input type="radio" name="tip" id="tip-15" value="15" class="field-input radio">
+            <label for="tip-15" class="label radio">15%</label>
+          </div>
+          <div class="field radio">
+            <input type="radio" name="tip" id="tip-25" value="25" class="field-input radio">
+            <label for="tip-25" class="label radio">25%</label>
+          </div>
+          <div class="field radio">
+            <input type="radio" name="tip" id="tip-50" value="50" class="field-input radio">
+            <label for="tip-50" class="label radio">50%</label>
+          </div>
+          <div class="field radio tip-custom-div">
+            <input type="radio" name="tip" id="tip-custom" value="custom" class="field-input radio">
+            <input type="number" name="tip-custom" id="tip-custom-text" class="field-input" placeholder="Custom">
+            <label for="tip-custom-text" class="label radio"></label>
+          </div>
+        </div>
+        
+        <label for="people" class="label">
+          Number of People
+          <span class="error">Error Text</span>
+        </label>
+        <div class="field">
+          <img src="./images/icon-person.svg" alt="" class="field-img">
+          <input type="number" name="people" id="people" placeholder="0" class="field-input">
+        </div>
+      </form>
 
-  Select Tip %
-  5%
-  10%
-  15%
-  25%
-  50%
-  Custom
+      <form class="result-form">
+        <div class="results">
+          <div class="field">
+            <label for="tip-amount" class="label">
+              Tip Amount <span class="small">/ person</span>
+            </label>
+            <!-- <input type="text" id="tip-amount" value="$0.00" class="field-input" readonly> -->
+            <textarea class="field-input" id="tip-amount" rows="1" readonly>
+              $0.00
+            </textarea>
+          </div>
+          <div class="field">
+            <label for="total-amount" class="label">
+              Total <span class="small">/ person</span>
+            </label>
+            <!-- <input type="text" id="total-amount" value="$00000.00" class="field-input" readonly> -->
+            <textarea class="field-input" id="total-amount" rows="1" readonly>
+              $0.00
+            </textarea>
+          </div>
+        </div>
+        <button type="reset" class="button reset" disabled>
+          Reset
+        </button>
+      </form>
+    </article>
 
-  Number of People
-
-  Tip Amount
-  / person
-
-  Total
-  / person
-
-  Reset
+    <div class="bottom" hidden></div>
+  </main>
   
   <footer class="attribution">
-    Challenge by <a href="https://www.frontendmentor.io?ref=challenge">Frontend Mentor</a>. 
+    Challenge by <a href="https://www.frontendmentor.io?ref=challenge">Frontend Mentor</a>.
     <br/>
     Coded by <a href="https://www.frontendmentor.io/profile/pangm1">Michael Pang</a>.
   </footer>
