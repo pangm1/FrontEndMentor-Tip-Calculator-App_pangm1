@@ -15,7 +15,7 @@
 <body>
   <main>
     <header>
-      <img src="./images/logo.svg" alt="SPLITTER">
+      <img src="./images/logo.svg" alt="SPLITTER" width="87" height="54">
     </header>
     <article>
       <form class="input-form">
@@ -24,7 +24,7 @@
           <span class="error">Error Text</span>
         </label>
         <div class="field">
-          <img src="./images/icon-dollar.svg" alt="" class="field-img">
+          <img src="./images/icon-dollar.svg" alt="" width='11' height='17' class="field-img">
           <input
             type="number"
             id="bill"
@@ -32,7 +32,7 @@
             placeholder="0" />
         </div>
 
-        <label for="tip" class="label">
+        <label class="label">
           Select Tip %
           <span class="error">Error Text</span>
         </label>
@@ -58,8 +58,8 @@
             <label for="tip-50" class="label radio">50%</label>
           </div>
           <div class="field radio tip-custom-div">
-            <input type="radio" name="tip" id="tip-custom" value="custom" class="field-input radio">
-            <input type="number" name="tip-custom" id="tip-custom-text" class="field-input" placeholder="Custom" disabled>
+            <input type="radio" name="tip" id="tip-custom" aria-label="Custom Tip" value="custom" class="field-input radio">
+            <input type="number" name="tip-custom" id="tip-custom-text" aria-label="Enter Custom Tip" class="field-input" placeholder="Custom" disabled>
           </div>
         </div>
         
@@ -68,7 +68,7 @@
           <span class="error">Error Text</span>
         </label>
         <div class="field">
-          <img src="./images/icon-person.svg" alt="" class="field-img">
+          <img src="./images/icon-person.svg" alt="" width='13' height='16' class="field-img">
           <input type="number" name="people" id="people" placeholder="0" class="field-input">
         </div>
       </form>
