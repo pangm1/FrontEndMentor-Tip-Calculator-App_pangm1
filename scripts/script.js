@@ -123,4 +123,5 @@ function divideCash(bill, tip, numPeople) {
 function resetForms() {
     inputForm.reset();
     resultForm.reset();
+    resetButton.disabled = true;
 }
