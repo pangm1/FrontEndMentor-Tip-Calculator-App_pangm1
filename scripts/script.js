@@ -2,44 +2,36 @@ const forms = Object.values(document.forms)
 const inputForm = forms.find((v) => {
     return v.classList.contains('input-form');
 });
-const radioGroup = inputForm.elements['tip'];
-
 const resultForm = forms.find((v) => {
     return v.classList.contains('result-form');
 });
-console.log(resultForm);
 
 const billErrorText = document.querySelector('.label[for=\'bill\'] .error');
-const billInput = document.querySelector('.field-input[name=\'bill\']');
+const billInput = inputForm.elements['bill'];
 const tipErrorText = document.querySelector('.label[for=\'tip\'] .error');
-const tipRadioButtons = document.querySelectorAll('.field-input.radio');
-const tipCustomInput = document.querySelector('.field-input[name=\'tip-custom\']');
+const radioGroup = inputForm.elements['tip'];
+const tipCustomInput = inputForm.elements['tip-custom-text'];
 const numPeopleErrorText = document.querySelector('.label[for=\'people\'] .error');
-const numPeopleInput = document.querySelector('.field-input[name=\'people\']');
+const numPeopleInput = inputForm.elements['people'];
 
-const resultTipText = document.querySelector('#tip-amount');
-const resultTotalText = document.querySelector('#total-amount');
-const resetButton = document.querySelector('.reset');
+const resultTipText = resultForm.elements['tip-amount'];
+const resultTotalText = resultForm.elements['total-amount'];
+const resetButton = resultForm.elements['reset-forms'];
 
-// TODO: fix tab order (especially for custom tip)
 
 billInput.addEventListener('input', onInput);
 numPeopleInput.addEventListener('input', onInput);
 
-tipRadioButtons.forEach((e) => {
-    e.addEventListener('change', onInput);
-});
+radioGroup.forEach(addEventListener.bind(null, 'change', onInput));
 
 resetButton.addEventListener('click', resetForms);
 
 
 function onInput(e) {
     const target = e.target;
-    console.log(target);
 
     if (target.type === 'radio') {
         if (target.value === 'custom') {
-            // console.log("Custom value");
             tipCustomInput.disabled = false;
             tipCustomInput.focus();
             tipCustomInput.addEventListener('input', onInput);
@@ -53,102 +45,74 @@ function onInput(e) {
     
 
     const [bill, tip, numPeople] = validateInput();
-    console.log(`Bill(${bill}) : Tip(${tip}) : People(${numPeople})`);
 
     if (bill && tip && numPeople) {
         const [divTip, divTotal] = divideCash(bill, tip, numPeople);
-        console.log(`Tip Amount: ${divTip}\nTotal Amount: ${divTotal}`);
 
         resultTipText.value = `$${divTip}`;
         resultTotalText.value = `$${ divTotal }`;
         resetButton.disabled = false;
     }
     else {
-        console.log('Invalid');
+        resultForm.reset();
         resetButton.disabled = true;
     }
 }
 
 function validateInput() {
-    const bill = Number.parseFloat(billInput.value);
-    console.log('Bill: ' + bill);
-
-    try {
-        if (!bill || bill <= 0) {
-            const message = 'Must be >0'
-            throw new Error(message);
-        }
-
-        if (bill.toFixed(2) != bill) {
-            const message = 'Must be whole cents'
-            throw new Error(message);
-        }
-
-        billErrorText.classList.remove('show');
-    } catch (error) {
-        // console.log("Bill Error");
-        // console.log(error.message);
-
-        billErrorText.textContent = error.message;
-        billErrorText.classList.add('show');
+    let bill = Number.parseFloat(billInput.value);
+    let errorShown = tryAndShowErrors([
+        { test: !bill || bill <= 0, message: 'Must be >0' },
+        { test: bill.toFixed(2) != bill, message: 'Must be whole cents' }]
+        , billErrorText);
+    if (!errorShown) {
+        bill = null;
     }
-    
 
-    const numPeople = Number.parseFloat(numPeopleInput.value);
-    console.log('Number of People: ' + numPeople);
-
-    try {
-        if (!numPeople || numPeople <= 0) {
-            const message = 'Must be >0'
-            throw new Error(message);
-        }
-
-        if (numPeople.toFixed(0) != numPeople) {
-            const message = 'Has to be an integer'
-            throw new Error(message);
-        }
-
-        numPeopleErrorText.classList.remove('show');
-    } catch (error) {
-        console.log("NumPeople Error");
-        console.log(error.message);
-
-        numPeopleErrorText.textContent = error.message;
-        numPeopleErrorText.classList.add('show');
+    let numPeople = Number.parseFloat(numPeopleInput.value);
+    errorShown = tryAndShowErrors([
+        { test: !numPeople || numPeople <= 0, message: 'Must be >0' },
+        { test: numPeople.toFixed(0) != numPeople, message: 'Must be an integer' }]
+        , numPeopleErrorText);
+    if (!errorShown) {
+        numPeople = null;
     }
+
 
     let tip = radioGroup.value;
-    console.log('Tip: ' + tip);
-
-    try {
-        if (tip === 'custom') {
-            console.log('Custom Tip');
-
-            tip = tipCustomInput.value;
-
-            if (tip < 0) {
-                const message = 'Must be >0'
-                throw new Error(message);
-            }
-        }
-        else {
-            if (tip <= 0) {
-                const message = 'Choose a button'
-                throw new Error(message);
-            }
-        }
-
-        tipErrorText.classList.remove('show');
-    } catch (error) {
-        // console.log("Tip Error");
-        // console.log(error.message);
-
-        tipErrorText.textContent = error.message;
-        tipErrorText.classList.add('show');
+    errorShown = tryAndShowErrors([
+        { test: !tip, message: 'Choose a tip' },
+        { test: tip === 'custom' && tipCustomInput.value <= 0, message: 'Must be >0' }]
+        , tipErrorText);
+    if (!errorShown) {
+        tip = null;
     }
+    else if (tip === 'custom' && tipCustomInput.value > 0) {
+        tip = tipCustomInput.value;
+    }
+
 
     return [bill, tip, numPeople];
 }
+
+function tryAndShowErrors(tests, errorTextElement) {
+    try {
+        for (let {test, message} of tests) {
+            if (test) {
+                throw new Error(message);
+            }
+        }
+
+        errorTextElement.classList.remove('show');
+    }
+    catch(error) {
+        errorTextElement.textContent = error.message;
+        errorTextElement.classList.add('show');
+        return false;
+    }
+    return true;
+}
+
 
 function divideCash(bill, tip, numPeople) {
     const divTip = bill * tip / 100 / numPeople;
